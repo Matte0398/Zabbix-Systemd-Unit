@@ -22,7 +22,19 @@ UserParameter=check.args[*],echo "$1"
 UserParameter=service.active[*],systemctl is-active "$1"
 ```
 
-Typical configuration paths are `/etc/zabbix/zabbix_agentd.conf` for Zabbix agent and `/etc/zabbix/zabbix_agent2.conf` for Zabbix agent 2. Alternatively, place the definitions in a `.conf` file covered by the agent's existing `Include` setting. Configure each key only once.
+The required UserParameters are provided in Utilities/userparameter.conf.
+
+You can either add these definitions to the main Zabbix agent configuration
+file or copy userparameter.conf into the agent's configuration include
+directory, typically:
+
+- Zabbix agent: /etc/zabbix/zabbix_agentd.d/
+- Zabbix agent 2: /etc/zabbix/zabbix_agent2.d/
+
+Ensure the main configuration file contains an Include directive matching
+the chosen directory, for example:
+
+Include=/etc/zabbix/zabbix_agentd.d/\*.conf
 
 | UserParameter       | Purpose                                                                                       | Example item key                                           |
 | ------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
