@@ -1,0 +1,77 @@
+zabbix_export:
+  version: "7.0"
+  template_groups:
+    - uuid: 740f23489157459294ce211f5f3df96e
+      name: Templates/Applications
+  templates:
+    - uuid: bb29aab9d8f04e90a90ff2e9aa2ebc30
+      template: "Template Systemd Unit"
+      name: "Template Systemd Unit"
+      description: |
+        Template for monitoring the Linux systemd Unit, applies to both Agent 1 and Agent 2.
+
+        Author: Matteo Z.
+      groups:
+        - name: Templates/Applications
+      discovery_rules:
+        - uuid: c16a8e472c164ca0a12bc4069f91ee47
+          name: "Units Discovery"
+          type: ZABBIX_ACTIVE
+          key: 'check.args["{$SYSTEMD.NAME.SERVICE.MATCHES}"]'
+          delay: 30m
+          item_prototypes:
+            - uuid: e02dea58b31c4aa1b3a054719fb692a9
+              name: "Unit {#UNIT.NAME}: Status"
+              type: ZABBIX_ACTIVE
+              key: 'service.active["{#UNIT.NAME}"]'
+              delay: 5m
+              value_type: TEXT
+              trends: "0"
+              description: "Status of the Systemd Unit"
+              tags:
+                - tag: component
+                  value: unit
+              trigger_prototypes:
+                - uuid: a5c2f19d9a484fc4904e0ba4d8805b90
+                  expression: 'last(/Template Systemd Unit/service.active["{#UNIT.NAME}"],#2)<>"active"'
+                  name: "Unit {#UNIT.NAME}: Not running"
+                  priority: HIGH
+                  manual_close: "YES"
+                  tags:
+                    - tag: scope
+                      value: availability
+          preprocessing:
+            - type: JAVASCRIPT
+              parameters:
+                - |
+                  // Value: raw string received, e.g. crond.service%sshd.service%rsyslog.service
+
+                  if (!value) {
+                      return JSON.stringify({ data: [] });
+                  }
+
+                  // Split the string at "%"
+                  var parts = value.split("%");
+
+                  // Create array for LLD
+                  var data = [];
+
+                  for (var i = 0; i < parts.length; i++) {
+                      var svc = parts[i].trim();
+
+                      if (svc.length > 0) {
+                          data.push({ "{#UNIT.NAME}": svc });
+                      }
+                  }
+
+                  // Return JSON LLD
+                  return JSON.stringify({ data: data });
+      tags:
+        - tag: class
+          value: software
+        - tag: target
+          value: linux
+      macros:
+        - macro: "{$SYSTEMD.NAME.SERVICE.MATCHES}"
+          value: sshd.service%crond.service%rsyslog.service
+          description: "Filter systemd service units by name separated by a % (this macro contains the default units)"
