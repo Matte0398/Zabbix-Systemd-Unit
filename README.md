@@ -125,3 +125,7 @@ For a unit expected to be active, the output should be `active`. Investigate oth
 - **Unexpected unit state:** check the exact unit name, availability of `systemctl`, and access to systemd from the agent service account.
 - **Alert differs from the latest state:** inspect the two most recent values; the current trigger uses the older one through `last(...,#2)`.
 - **No alert when the agent stops reporting:** this template has no `nodata()` or agent availability trigger. Monitor host and agent availability separately.
+
+## License
+
+Released under the MIT License. See [LICENSE](LICENSE).
