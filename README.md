@@ -4,6 +4,28 @@ Zabbix template for monitoring the state of selected Linux systemd units through
 
 Import [template_systemd_unit.yaml](template_systemd_unit.yaml), exported in **Zabbix 7.0** format. The template is named `Template Systemd Unit`, belongs to `Templates/Applications`. Compatibility with other Zabbix versions must be verified in the target environment.
 
+## Contents
+
+- [Repository structure](#repository-structure)
+- [Requirements](#requirements)
+- [Agent configuration](#agent-configuration)
+- [Import and host setup](#import-and-host-setup)
+- [Selecting units](#selecting-units)
+- [Collected data and alerts](#collected-data-and-alerts)
+- [Verification and troubleshooting](#verification-and-troubleshooting)
+- [License](#license)
+
+## Repository structure
+
+```text
+Zabbix-Systemd-Unit/
+|-- Utilities/
+|   `-- userparameter.conf
+|-- LICENSE
+|-- README.md
+`-- template_systemd_unit.yaml
+```
+
 ## Requirements
 
 - A Linux host running systemd, with `systemctl` available to the agent service account.
