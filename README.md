@@ -44,10 +44,10 @@ UserParameter=check.args[*],echo "$1"
 UserParameter=service.active[*],systemctl is-active "$1"
 ```
 
-The required UserParameters are provided in [Utilities/userparameter.conf](Utilities/userparameter.conf).
+The required UserParameters are also provided in [userparameter.conf](Utilities/userparameter.conf).
 
 You can either add these definitions to the main Zabbix agent configuration
-file or copy userparameter.conf into the agent's configuration include
+file or copy **userparameter.conf** into the agent's configuration include
 directory, typically:
 
 - Zabbix agent: /etc/zabbix/zabbix_agentd.d/
@@ -56,7 +56,7 @@ directory, typically:
 Ensure the main configuration file contains an Include directive matching
 the chosen directory, for example:
 
-Include=/etc/zabbix/zabbix_agentd.d/\*.conf
+**Include=/etc/zabbix/zabbix_agentd.d/\*.conf**
 
 | UserParameter       | Purpose                                                                                       | Example item key                                           |
 | ------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
